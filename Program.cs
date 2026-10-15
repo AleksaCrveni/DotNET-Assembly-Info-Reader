@@ -1,7 +1,10 @@
 ﻿using Reader;
+using Reader.Data;
 
 string path = @"W:\PDFToImageConverter\Converter\bin\Debug\net11.0\Converter.dll";
-FileStream fs = File.OpenRead(path);
-Logger l = new Logger();
-bool valid = Validator.ValidatePEHeaders(fs, l);
-Console.Write(l.ToString());
+DLLReader r = new DLLReader(path);
+DLL_File dll = r.Parse(out bool valid);
+if (!valid)
+  Console.Write(r.GetLogs());
+else
+  Console.WriteLine("Valid parsing!");
