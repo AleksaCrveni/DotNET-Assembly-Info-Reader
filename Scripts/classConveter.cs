@@ -28,6 +28,7 @@ foreach (string line in lines)
     _   => "type"
   };
   sb.AppendFormat("  public {0} {1};\n", type, field);
+  sb.Append('\n');
 }
 
 sb.Append('}');
