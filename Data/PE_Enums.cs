@@ -22,6 +22,7 @@ namespace Reader.Data
   {
     SIG_VALIDATION = 17744,
     MACHINE_VALIDATION = 0x14c,
+    MAGIC_VALIDATION = 0x10B
   }
 
 }

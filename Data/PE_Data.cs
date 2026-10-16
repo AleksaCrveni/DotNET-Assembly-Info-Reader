@@ -6,7 +6,7 @@ namespace Reader.Data
 {
   public class PE_FileHeader
   {
-    public ushort Signature;
+    public uint Signature;
     /// <summary>
     /// Always 0x14c.
     /// </summary>

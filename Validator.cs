@@ -134,5 +134,33 @@ namespace Reader
 
       return true;
     }
+
+    public static bool ValidatePEHeaderStandardFields(PE_StandardFields header, Logger logger)
+    {
+      if (header.Magic != (ushort)PE_CONSTANTS.MAGIC_VALIDATION)
+      {
+
+      }
+
+      // spec not up to date? my dll has value 48
+      //if (header.LMajor != 6)
+      //{
+
+      //}
+
+      if (header.LMinor != 0)
+      {
+
+      }
+
+      // this is 
+      if (header.RVAEntryPoint != 0)
+      {
+
+      }
+
+
+      return true;
+    }
   }
 }
