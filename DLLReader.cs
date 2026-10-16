@@ -119,11 +119,11 @@ namespace Reader
       }
       if (header.OptionalHeaderSize > 28)
       {
-
+        if (!ParsePEFileHeaderNTSpecificFields(oHeader, ref p)) return false;
       }
       if (header.OptionalHeaderSize > 96)
       {
-
+        if (!ParsePEFileDataDirectories(oHeader, ref p)) return false;
       }
 
       file.PEHeader.OptionalHeader = oHeader;
@@ -147,6 +147,61 @@ namespace Reader
       //if (!Validator.ValidatePEHeaderStandardFields(fields, _logger)) return false;
 
       header.StandardFields = fields;
+      return true;
+    }
+
+    private bool ParsePEFileHeaderNTSpecificFields(PE_OptionalHeader header, ref ParserHelper p)
+    {
+      PE_NTSpecificFields fields = new PE_NTSpecificFields();
+
+      fields.ImageBase               = p.ReadUInt();
+      fields.SectionAlignment        = p.ReadUInt();
+      fields.FileAlignment           = p.ReadUInt();
+      fields.OSMajor                 = p.ReadUShort();
+      fields.OSMinor                 = p.ReadUShort();
+      fields.UserMajor               = p.ReadUShort();
+      fields.UserMinor               = p.ReadUShort();
+      fields.SubSysMajor             = p.ReadUShort();
+      fields.SubSysMinor             = p.ReadUShort();
+                                       p.SkipNextN(4); // reserved
+      fields.ImageSize               = p.ReadUInt();
+      fields.HeaderSize              = p.ReadUInt();
+      fields.FileChecksum            = p.ReadUInt();
+      fields.SubSystem               = p.ReadUShort();
+      fields.DLLFlags                = p.ReadUShort();
+      fields.StackReserveSize        = p.ReadUInt();
+      fields.StackCommitSize         = p.ReadUInt();
+      fields.HeapReserveSize         = p.ReadUInt();
+      fields.HeapCommitSize          = p.ReadUInt();
+      fields.LoaderFlags             = p.ReadUInt();
+      fields.NumberOfDataDirectories = p.ReadUInt();
+
+      header.NTSpecificFields = fields;
+      return true;
+    }
+
+    private bool ParsePEFileDataDirectories(PE_OptionalHeader header, ref ParserHelper p)
+    {
+      PE_DataDirectories fields = new PE_DataDirectories();
+
+      fields.ExportTableOffset                = p.ReadULong();
+      fields.ImportTableOffset                = p.ReadULong();
+      fields.ResourceTableOffset              = p.ReadULong();
+      fields.ExceptionTableOffset             = p.ReadULong();
+      fields.CertificateTableOffset           = p.ReadULong();
+      fields.BaseRelocationTableOffset        = p.ReadULong();
+      fields.DebugTableOffset                 = p.ReadULong();
+      fields.CopyrightTableOffset             = p.ReadULong();
+      fields.GlobalPtrTableOffset             = p.ReadULong();
+      fields.TLSTableOffset                   = p.ReadULong();
+      fields.LoadConfigTableOffset            = p.ReadULong();
+      fields.BoundImport                      = p.ReadULong();
+      fields.IATTableOffset                   = p.ReadULong();
+      fields.DelayImportDescriptorTableOffset = p.ReadULong();
+      fields.CLIHeaderTableOffset             = p.ReadULong();
+                                                p.SkipNextN(8);
+
+      header.DataDirectories = fields;
       return true;
     }
 
